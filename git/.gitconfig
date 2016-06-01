@@ -1,0 +1,7 @@
+[alias]
+	co = checkout
+[user]
+	name = Jakub Błach
+	email = jakubblach@gmail.com
+[core]
+	editor = nano
