@@ -1,6 +1,7 @@
 [alias]
 	co = checkout
 	lg = log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr)%Creset [%cn]' --abbrev-commit --date=relative
+	pr = pull --rebase
 [user]
 	name = Jakub Błach
 	email = jakubblach@gmail.com
