@@ -19,6 +19,8 @@ Bootstrap
 * jdk8 (not install Java Cryptography Extension (JCE) Unlimited 
 Strength Jurisdiction Policy - edit PKGBUILD)
 * deluge (via pacman)
+* gimp 
+* steam
 
 TODO
 ----
