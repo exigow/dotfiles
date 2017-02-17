@@ -1,0 +1,10 @@
+#   yaourtrc  - Configuration for yaourt
+#   See yaourtrc(5) for more information
+
+EDITOR="$EDITOR"
+
+NOCONFIRM=1
+
+BUILD_NOCONFIRM=1
+
+EDITFILES=0
