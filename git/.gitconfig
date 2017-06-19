@@ -1,10 +1,11 @@
 [alias]
 	co = checkout
 	lg = log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr)%Creset [%cn]' --abbrev-commit --date=relative --max-count 10
-	pr = pull --rebase
+	prog = pull --rebase origin master
 	decapitate = reset --soft HEAD~1
 [user]
 	name = Jakub Błach
 	email = jakubblach@gmail.com
 [core]
 	editor = nano
+	autocrlf = input
