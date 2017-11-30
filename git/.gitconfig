@@ -1,7 +1,7 @@
 [alias]
 	co = checkout
-	lg = log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr)%Creset [%cn]' --abbrev-commit --date=relative --max-count 10
-	prog = pull --rebase origin master
+	lg = log --pretty=format:'%C(red)%<(10,trunc)%h%C(reset) %<(60,trunc)%s %<(12,trunc)%C(green)%an%C(reset) %C(yellow)%ad%C(reset)' --abbrev-commit --date=format:'%d/%m/%y' --max-count 10
+	prom = pull --rebase origin master
 	decapitate = reset --soft HEAD~1
 [user]
 	name = Jakub Błach
