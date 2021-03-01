@@ -1,48 +1,45 @@
-set $super Mod4
-
-bindsym $super+R exec --no-startup-id dmenu_recency
-bindsym $super+L exec --no-startup-id blurlock
-bindsym $super+Shift+C reload
-bindsym $super+Shift+R restart
-bindsym $super+Escape kill
-bindsym $super+Left focus left
-bindsym $super+Down focus down
-bindsym $super+Up focus up
-bindsym $super+Right focus right
-bindsym $super+Shift+Left move left
-bindsym $super+Shift+Down move down
-bindsym $super+Shift+Up move up
-bindsym $super+Shift+Right move right
-bindsym $super+0 workspace 0
-bindsym $super+1 workspace 1
-bindsym $super+2 workspace 2
-bindsym $super+3 workspace 3
-bindsym $super+4 workspace 4
-bindsym $super+5 workspace 5
-bindsym $super+6 workspace 6
-bindsym $super+7 workspace 7
-bindsym $super+8 workspace 8
-bindsym $super+9 workspace 9
-bindsym $super+Ctrl+0 move container to workspace 0
-bindsym $super+Ctrl+1 move container to workspace 1
-bindsym $super+Ctrl+2 move container to workspace 2
-bindsym $super+Ctrl+3 move container to workspace 3
-bindsym $super+Ctrl+4 move container to workspace 4
-bindsym $super+Ctrl+5 move container to workspace 5
-bindsym $super+Ctrl+6 move container to workspace 6
-bindsym $super+Ctrl+7 move container to workspace 7
-bindsym $super+Ctrl+8 move container to workspace 8
-bindsym $super+Ctrl+9 move container to workspace 9
+exec --no-startup-id nm-applet
+exec --no-startup-id xautolock -time 1 -locker blurlock
 
 bar {
 	i3bar_command i3bar
 	position bottom
 }
 
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore; sleep 1; picom -b
-exec --no-startup-id nm-applet
-exec --no-startup-id start_conky_maia
-exec --no-startup-id xautolock -time 10 -locker blurlock
-exec_always --no-startup-id ff-theme-util
-exec_always --no-startup-id fix_xcursor
+bindsym Mod4+R exec --no-startup-id dmenu_recency
+bindsym Mod4+L exec --no-startup-id blurlock
+bindsym Mod4+Escape kill
+bindsym Mod4+Left focus left
+bindsym Mod4+Down focus down
+bindsym Mod4+Up focus up
+bindsym Mod4+Right focus right
+
+bindsym Mod4+0 workspace 0
+bindsym Mod4+1 workspace 1
+bindsym Mod4+2 workspace 2
+bindsym Mod4+3 workspace 3
+bindsym Mod4+4 workspace 4
+bindsym Mod4+5 workspace 5
+bindsym Mod4+6 workspace 6
+bindsym Mod4+7 workspace 7
+bindsym Mod4+8 workspace 8
+bindsym Mod4+9 workspace 9
+
+bindsym Mod4+Shift+Left move left
+bindsym Mod4+Shift+Down move down
+bindsym Mod4+Shift+Up move up
+bindsym Mod4+Shift+Right move right
+
+bindsym Mod4+Shift+Escape exit
+bindsym Mod4+Shift+R restart
+
+bindsym Mod4+Ctrl+0 move container to workspace 0
+bindsym Mod4+Ctrl+1 move container to workspace 1
+bindsym Mod4+Ctrl+2 move container to workspace 2
+bindsym Mod4+Ctrl+3 move container to workspace 3
+bindsym Mod4+Ctrl+4 move container to workspace 4
+bindsym Mod4+Ctrl+5 move container to workspace 5
+bindsym Mod4+Ctrl+6 move container to workspace 6
+bindsym Mod4+Ctrl+7 move container to workspace 7
+bindsym Mod4+Ctrl+8 move container to workspace 8
+bindsym Mod4+Ctrl+9 move container to workspace 9
