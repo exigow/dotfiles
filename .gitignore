@@ -1,6 +1,3 @@
-# Blacklist all in this folder
-/*
-# Except for these
+*
 !.gitignore
 !.gitconfig
-
