@@ -3,6 +3,7 @@ exec --no-startup-id nm-applet
 exec --no-startup-id volumeicon
 exec terminal
 
+font xft:Source Code Pro
 focus_follows_mouse no
 default_border none
 
