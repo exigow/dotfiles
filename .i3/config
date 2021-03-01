@@ -1,6 +1,6 @@
 exec --no-startup-id xautolock -time 1 -locker blurlock
-exec --no-startup-id nm-applet
 exec --no-startup-id volumeicon
+exec --no-startup-id nm-applet
 exec terminal
 
 font xft:Source Code Pro
@@ -9,7 +9,7 @@ default_border none
 
 bar {
     status_command i3status
-	position bottom
+	position top
 }
 
 bindsym Mod1+F4 kill
