@@ -1,41 +1,46 @@
-set $mod Mod4
-bindsym $mod+Return exec terminal
-bindsym $mod+Shift+q kill
-bindsym $mod+d exec --no-startup-id dmenu_recency
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+set $super Mod4
 
-bindsym $mod+0 workspace 0
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
+bindsym $super+Return exec terminal
+bindsym $super+Shift+Q kill
+bindsym $super+D exec --no-startup-id dmenu_recency
+bindsym $super+Left focus left
+bindsym $super+Down focus down
+bindsym $super+Up focus up
+bindsym $super+Right focus right
+bindsym $super+Shift+Left move left
+bindsym $super+Shift+Down move down
+bindsym $super+Shift+Up move up
+bindsym $super+Shift+Right move right
+bindsym $super+0 workspace 0
+bindsym $super+1 workspace 1
+bindsym $super+2 workspace 2
+bindsym $super+3 workspace 3
+bindsym $super+4 workspace 4
+bindsym $super+5 workspace 5
+bindsym $super+6 workspace 6
+bindsym $super+7 workspace 7
+bindsym $super+8 workspace 8
+bindsym $super+9 workspace 9
+bindsym $super+Ctrl+0 move container to workspace 0
+bindsym $super+Ctrl+1 move container to workspace 1
+bindsym $super+Ctrl+2 move container to workspace 2
+bindsym $super+Ctrl+3 move container to workspace 3
+bindsym $super+Ctrl+4 move container to workspace 4
+bindsym $super+Ctrl+5 move container to workspace 5
+bindsym $super+Ctrl+6 move container to workspace 6
+bindsym $super+Ctrl+7 move container to workspace 7
+bindsym $super+Ctrl+8 move container to workspace 8
+bindsym $super+Ctrl+9 move container to workspace 9
 
-bindsym $mod+Ctrl+0 move container to workspace 0
-bindsym $mod+Ctrl+1 move container to workspace 1
-bindsym $mod+Ctrl+2 move container to workspace 2
-bindsym $mod+Ctrl+3 move container to workspace 3
-bindsym $mod+Ctrl+4 move container to workspace 4
-bindsym $mod+Ctrl+5 move container to workspace 5
-bindsym $mod+Ctrl+6 move container to workspace 6
-bindsym $mod+Ctrl+7 move container to workspace 7
-bindsym $mod+Ctrl+8 move container to workspace 8
-bindsym $mod+Ctrl+9 move container to workspace 9
+bindsym $super+Shift+C reload
+bindsym $super+Shift+R restart
+bindsym $super+L exec --no-startup-id blurlock
 
-bindsym $mod+Shift+C reload
-bindsym $mod+Shift+R restart
-bindsym $mod+L exec --no-startup-id blurlock
+bar {
+	i3bar_command i3bar
+	position bottom
+}
+
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nitrogen --restore; sleep 1; picom -b
 exec --no-startup-id manjaro-hello
@@ -47,7 +52,3 @@ exec --no-startup-id start_conky_maia
 exec --no-startup-id xautolock -time 10 -locker blurlock
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
-bar {
-	i3bar_command i3bar
-	position bottom
-}
