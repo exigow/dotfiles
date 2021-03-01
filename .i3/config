@@ -1,18 +1,18 @@
 exec --no-startup-id xautolock -time 1 -locker blurlock
 exec --no-startup-id nm-applet
 
+focus_follows_mouse no
+default_border none
+
 bar {
-	i3bar_command i3bar
+    status_command i3status
 	position bottom
 }
 
+bindsym Mod1+F4 kill
 bindsym Mod4+R exec --no-startup-id dmenu_recency
 bindsym Mod4+L exec --no-startup-id blurlock
-bindsym Mod4+Escape kill
-bindsym Mod4+Left focus left
-bindsym Mod4+Down focus down
-bindsym Mod4+Up focus up
-bindsym Mod4+Right focus right
+bindsym Mod1+Tab workspace next
 bindsym Mod4+0 workspace 0
 bindsym Mod4+1 workspace 1
 bindsym Mod4+2 workspace 2
@@ -23,10 +23,5 @@ bindsym Mod4+6 workspace 6
 bindsym Mod4+7 workspace 7
 bindsym Mod4+8 workspace 8
 bindsym Mod4+9 workspace 9
-
-bindsym Mod4+Shift+Left move left
-bindsym Mod4+Shift+Down move down
-bindsym Mod4+Shift+Up move up
-bindsym Mod4+Shift+Right move right
 bindsym Mod4+Shift+Escape exit
 bindsym Mod4+Shift+R restart
