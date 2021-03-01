@@ -1,5 +1,5 @@
-exec --no-startup-id nm-applet
 exec --no-startup-id xautolock -time 1 -locker blurlock
+exec --no-startup-id nm-applet
 
 bar {
 	i3bar_command i3bar
@@ -13,7 +13,6 @@ bindsym Mod4+Left focus left
 bindsym Mod4+Down focus down
 bindsym Mod4+Up focus up
 bindsym Mod4+Right focus right
-
 bindsym Mod4+0 workspace 0
 bindsym Mod4+1 workspace 1
 bindsym Mod4+2 workspace 2
@@ -29,17 +28,5 @@ bindsym Mod4+Shift+Left move left
 bindsym Mod4+Shift+Down move down
 bindsym Mod4+Shift+Up move up
 bindsym Mod4+Shift+Right move right
-
 bindsym Mod4+Shift+Escape exit
 bindsym Mod4+Shift+R restart
-
-bindsym Mod4+Ctrl+0 move container to workspace 0
-bindsym Mod4+Ctrl+1 move container to workspace 1
-bindsym Mod4+Ctrl+2 move container to workspace 2
-bindsym Mod4+Ctrl+3 move container to workspace 3
-bindsym Mod4+Ctrl+4 move container to workspace 4
-bindsym Mod4+Ctrl+5 move container to workspace 5
-bindsym Mod4+Ctrl+6 move container to workspace 6
-bindsym Mod4+Ctrl+7 move container to workspace 7
-bindsym Mod4+Ctrl+8 move container to workspace 8
-bindsym Mod4+Ctrl+9 move container to workspace 9
