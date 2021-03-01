@@ -1,0 +1,6 @@
+[alias]
+	co = checkout
+	prom = pull --rebase origin master
+[user]
+	name = Jakub Blach
+	email = jakubblach@gmail.com
