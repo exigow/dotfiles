@@ -6,27 +6,9 @@
 #include <SDL2/SDL_image.h>
 #include <math.h>
 
-char* read_text(char *filename) {
-    char *buffer = NULL;
-    int string_size, read_size;
-    FILE *handler = fopen(filename, "r");
-    if (handler) {
-        fseek(handler, 0, SEEK_END);
-        string_size = ftell(handler);
-        rewind(handler);
-        buffer = (char*) malloc(sizeof(char) * (string_size + 1) );
-        read_size = fread(buffer, sizeof(char), string_size, handler);
-        buffer[string_size] = '\0';
-        if (string_size != read_size) {
-            free(buffer);
-            buffer = NULL;
-        }
-        fclose(handler);
-    }
-    return buffer;
-}
+char* read_text(char *filename);
 
-unsigned int compile_shader(const char *code, unsigned int shader_type) {
+int compile_shader(const char *code, int shader_type) {
     unsigned int shader = glCreateShader(shader_type);
     glShaderSource(shader, 1, &code, NULL);
     glCompileShader(shader);
@@ -82,11 +64,11 @@ int main(int argc, char **argv) {
     SDL_BlitSurface(original_surface, 0, surface, 0);
     SDL_FreeSurface(original_surface);
     glewInit();
-    unsigned int program = glCreateProgram();
+    int program = glCreateProgram();
     char *vertex_text = read_text(config.vertex_filename);
     char *fragment_text = read_text(config.fragment_filename);
-    unsigned int vertex_shader = compile_shader(vertex_text, GL_VERTEX_SHADER);
-    unsigned int fragment_shader = compile_shader(fragment_text, GL_FRAGMENT_SHADER);
+    int vertex_shader = compile_shader(vertex_text, GL_VERTEX_SHADER);
+    int fragment_shader = compile_shader(fragment_text, GL_FRAGMENT_SHADER);
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
     glLinkProgram(program);
@@ -99,10 +81,10 @@ int main(int argc, char **argv) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     unsigned int vao;
     glGenVertexArrays(1, &vao);
-    unsigned int last_ticks = SDL_GetTicks();
+    int last_ticks = SDL_GetTicks();
     float time = 0;
     while (1) {
-        unsigned int ticks = SDL_GetTicks();
+        int ticks = SDL_GetTicks();
         float delta_time = (ticks - last_ticks) / 1000.0;
         last_ticks = ticks;
         time += delta_time;
@@ -126,4 +108,24 @@ int main(int argc, char **argv) {
         SDL_Delay(1000 / 60);
     }
     return 0;
+}
+
+char* read_text(char *filename) {
+    char *buffer = NULL;
+    int string_size, read_size;
+    FILE *handler = fopen(filename, "r");
+    if (handler) {
+        fseek(handler, 0, SEEK_END);
+        string_size = ftell(handler);
+        rewind(handler);
+        buffer = (char*) malloc(sizeof(char) * (string_size + 1) );
+        read_size = fread(buffer, sizeof(char), string_size, handler);
+        buffer[string_size] = '\0';
+        if (string_size != read_size) {
+            free(buffer);
+            buffer = NULL;
+        }
+        fclose(handler);
+    }
+    return buffer;
 }
