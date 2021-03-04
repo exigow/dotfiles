@@ -33,5 +33,6 @@ void main() {
     vec3 color = pal(blocky, vec3(0.5, 0.5, 0.5), vec3(0.5, 0.5, 0.5), vec3(2.0, 1.0, 0.0), vec3(0.5, 0.20, 0.25));
     vec2 vig_uv = fragCoord.xy * (1.0 - fragCoord.xy);
     float vig = pow(vig_uv.x * vig_uv.y * 15.0, 0.25);
-    fragColor = vec4(color * vig, 1.0);
+    vec4 tex = texture(texSampler, fragCoord);
+    fragColor = vec4(tex.rgb * color * vig, 1.0);
 }

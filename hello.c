@@ -26,44 +26,40 @@ char* read_text_file(char *filename) {
     return buffer;
 }
 
-GLuint compile_shader(const char *code, GLuint shaderType) {
-    GLuint result = glCreateShader(shaderType);
-    glShaderSource(result, 1, &code, NULL);
-    glCompileShader(result);
-    GLint shaderCompiled = GL_FALSE;
-    glGetShaderiv( result, GL_COMPILE_STATUS, &shaderCompiled );
-    if (shaderCompiled != GL_TRUE) {
-        GLint logLength;
-        glGetShaderiv(result, GL_INFO_LOG_LENGTH, &logLength);
-        if (logLength > 0)
-        {
-            GLchar *log = (GLchar*)malloc(logLength);
-            glGetShaderInfoLog(result, logLength, &logLength, log);
-            printf("Compilation error! Message:\n%s\n", log);
-            free(log);
-        }
-        glDeleteShader(result);
-        return 0;
+unsigned int compile_shader(const char *code, GLuint shader_type) {
+    unsigned int shader = glCreateShader(shader_type);
+    glShaderSource(shader, 1, &code, NULL);
+    glCompileShader(shader);
+    int shaderCompiled = GL_TRUE;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &shaderCompiled);
+    if (shaderCompiled == GL_FALSE) {
+        int length;
+        char *error;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+        glGetShaderInfoLog(shader, length, &length, error);
+        fprintf(stderr, error);
+        exit(EXIT_FAILURE);
     }
-    return result;
+    return shader;
 }
 
 struct Config {
     char *fragment_filename;
     char *vertex_filename;
+    char *texture_filename;
 };
 
 struct Config parse_config(int argc, char **argv) {
     char *previous_word = *argv;
-    struct Config config = { NULL, NULL };
+    struct Config config = { NULL, NULL, NULL };
     while (argc--) {
         char *word = *argv++;
-        if (!strcmp(previous_word, "-f")) {
+        if (!strcmp(previous_word, "-f"))
             config.fragment_filename = word;
-        }
-        if (!strcmp(previous_word, "-v")) {
+        if (!strcmp(previous_word, "-v"))
             config.vertex_filename = word;
-        }
+        if (!strcmp(previous_word, "-t"))
+            config.texture_filename = word;
         previous_word = word;
     }
     return config;
@@ -73,70 +69,35 @@ int main(int argc, char **argv) {
     struct Config config = parse_config(argc, argv);
     Display *display = XOpenDisplay(NULL);
 	Window window = RootWindow(display, DefaultScreen(display));
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-	    printf("error %s\n", SDL_GetError());
-	}
-    if (IMG_Init(IMG_INIT_PNG) < 0) {
-        printf("error %s\n", IMG_GetError());
-    }
+	SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* sdl_window = SDL_CreateWindowFrom((void*) window);
     SDL_Renderer* sdl_renderer = SDL_CreateRenderer(sdl_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     SDL_GLContext sdl_gl = SDL_GL_CreateContext(sdl_window);
     SDL_GL_SetSwapInterval(1);
     SDL_Event event;
     SDL_GL_MakeCurrent(sdl_window, sdl_gl);
-    SDL_Surface* original_surface = IMG_Load("/home/exigo/image.png");
-    if (original_surface == NULL) {
-        printf("Unable to load image %s\n", SDL_GetError());
-    }
-    SDL_Surface* surface = SDL_CreateRGBSurface(0, 1024, 1024, 24, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
-    if (surface == NULL) {
-        printf("Unable to load image %s\n", SDL_GetError());
-    }
+    IMG_Init(IMG_INIT_PNG);
+    SDL_Surface* original_surface = IMG_Load(config.texture_filename);
+    SDL_Surface* surface = SDL_CreateRGBSurface(0, original_surface->w, original_surface->h, 24, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
     SDL_BlitSurface(original_surface, 0, surface, 0);
     SDL_FreeSurface(original_surface);
-    GLenum err = glewInit();
-    if (err != GLEW_OK) {
-        printf("GLEW error %s\n", glewGetString(err));
-    }
-    GLuint programId = glCreateProgram();
-    GLuint vtxShaderId = compile_shader(read_text_file(config.vertex_filename), GL_VERTEX_SHADER);
-    GLuint fragShaderId = compile_shader(read_text_file(config.fragment_filename), GL_FRAGMENT_SHADER);
-    GLuint timeLoc;
-    if (vtxShaderId && fragShaderId) {
-        glAttachShader(programId, vtxShaderId);
-        glAttachShader(programId, fragShaderId);
-        glLinkProgram(programId);
-        glValidateProgram(programId);
-        timeLoc = glGetUniformLocation(programId, "iTime");
-        if (timeLoc == -1) {
-            printf("Uniform iTime not active\n");
-        }
-        GLint logLen;
-        glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &logLen);
-        if (logLen > 0) {
-            char* log = (char*) malloc(logLen * sizeof(char));
-            glGetProgramInfoLog(programId, logLen, &logLen, log);
-            printf("Compilation error! Message:\n%s\n", log);
-            free(log);
-        }
-    }
-    if (vtxShaderId) {
-        glDeleteShader(vtxShaderId);
-    }
-    if (fragShaderId) {
-        glDeleteShader(fragShaderId);
-    }
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    GLuint texture;
+    glewInit();
+    unsigned int programId = glCreateProgram();
+    unsigned int vtxShaderId = compile_shader(read_text_file(config.vertex_filename), GL_VERTEX_SHADER);
+    unsigned int fragShaderId = compile_shader(read_text_file(config.fragment_filename), GL_FRAGMENT_SHADER);
+    glAttachShader(programId, vtxShaderId);
+    glAttachShader(programId, fragShaderId);
+    glLinkProgram(programId);
+    glValidateProgram(programId);
+    unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    printf("Image size: %i, %i\nTexture ID: %i\n", surface->w, surface->h, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, surface->pixels);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    Uint32 last_ticks = SDL_GetTicks();
+    unsigned int vao;
+    glGenVertexArrays(1, &vao);
+    unsigned int last_ticks = SDL_GetTicks();
     float time = 0;
     while (1) {
         Uint32 ticks = SDL_GetTicks();
@@ -154,13 +115,11 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        glBindTexture(GL_TEXTURE_2D, texture);
         glUseProgram(programId);
-        glUniform1f(timeLoc, time);
         glBindVertexArray(vao);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1f(glGetUniformLocation(programId, "iTime"), time);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glUseProgram(0);
-        glBindTexture(GL_TEXTURE_2D, 0);
         SDL_GL_SwapWindow(sdl_window);
         SDL_Delay(1000 / 60);
     }
