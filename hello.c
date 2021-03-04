@@ -48,7 +48,7 @@ GLuint compile_shader(const char *code, GLuint shaderType) {
     return result;
 }
 
-int main(void) {
+int main(int argc, char **argv) {
     Display *display = XOpenDisplay(NULL);
 	const Window window = RootWindow(display, DefaultScreen(display));
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
