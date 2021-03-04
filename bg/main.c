@@ -72,13 +72,11 @@ int main(int argc, char **argv) {
     Display *display = XOpenDisplay(NULL);
 	SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* window = SDL_CreateWindowFrom((void*) RootWindow(display, DefaultScreen(display)));
-    SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    SDL_GLContext sdl_gl = SDL_GL_CreateContext(window);
-    SDL_GL_MakeCurrent(window, sdl_gl);
-    IMG_Init(IMG_INIT_PNG);
-    SDL_Surface* original_surface = IMG_Load(config.textureFile);
-    SDL_Surface* surface = SDL_CreateRGBSurface(0, original_surface->w, original_surface->h, 24, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
-    SDL_BlitSurface(original_surface, 0, surface, 0);
+    SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_GL_MakeCurrent(window, SDL_GL_CreateContext(window));
+    SDL_Surface* imageSurface = IMG_Load(config.textureFile);
+    SDL_Surface* surface = SDL_CreateRGBSurface(0, imageSurface->w, imageSurface->h, 24, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
+    SDL_BlitSurface(imageSurface, 0, surface, 0);
     glewInit();
     int program = glCreateProgram();
     int vertexShader = compileShader(vertexText, GL_VERTEX_SHADER);
