@@ -12,7 +12,7 @@ typedef struct Config {
     char *textureFile;
 } Config;
 
-char* readFile(char *path) {
+static char* readFile(char *path) {
     char *buffer = NULL;
     int string_size, read_size;
     FILE *handler = fopen(path, "r");
@@ -32,7 +32,7 @@ char* readFile(char *path) {
     return buffer;
 }
 
-Config parseConfig(int argc, char **argv) {
+static Config parseConfig(int argc, char **argv) {
     char *previous_word = *argv;
     Config config;
     while (argc--) {
@@ -48,7 +48,7 @@ Config parseConfig(int argc, char **argv) {
     return config;
 }
 
-int compileShader(const char *code, int shaderType) {
+static int compileShader(const char *code, int shaderType) {
     unsigned int shader = glCreateShader(shaderType);
     glShaderSource(shader, 1, &code, NULL);
     glCompileShader(shader);
