@@ -91,8 +91,6 @@ int main(int argc, char **argv) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, surface->pixels);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
     SDL_Event event;
     while (1) {
         while (SDL_PollEvent(&event)) {
@@ -101,9 +99,8 @@ int main(int argc, char **argv) {
             }
         }
         glUseProgram(program);
-        glBindVertexArray(vao);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glUniform1f(glGetUniformLocation(program, "iTime"), SDL_GetTicks() / 1000.);
+        glUniform1f(glGetUniformLocation(program, "iTime"), SDL_GetTicks() / 1000.0);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         SDL_GL_SwapWindow(window);
         SDL_Delay(1000 / 60);
