@@ -2,5 +2,5 @@
 
 ```shell
 make
-make run-sample
+make run
 ``` 
