@@ -1,10 +1,8 @@
 #include <GL/glew.h>
-#include <X11/X.h>
 #include <X11/Xlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_image.h>
-#include <math.h>
 
 typedef struct Config {
     char *fragmentFile;
@@ -57,9 +55,8 @@ static int compileShader(const char *code, int shaderType) {
     if (compiled == GL_FALSE) {
         int length;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-        char *error = NULL;
+        char *error = "";
         glGetShaderInfoLog(shader, length, NULL, error);
-        printf(error);
         exit(EXIT_FAILURE);
     }
     return shader;

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -lm -lX11 -lSDL2 -lSDL2_image -lGL -lGLEW
+CFLAGS = -Wall -lX11 -lGL -lGLEW -lSDL2 -lSDL2_image
 
 all:
 	$(CC) $(CFLAGS) -o bg main.c
