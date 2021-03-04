@@ -54,7 +54,6 @@ int main(int argc, char **argv) {
     SDL_Window* window = SDL_CreateWindowFrom((void*) RootWindow(display, DefaultScreen(display)));
     SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     SDL_GLContext sdl_gl = SDL_GL_CreateContext(window);
-    SDL_GL_SetSwapInterval(1);
     SDL_GL_MakeCurrent(window, sdl_gl);
     IMG_Init(IMG_INIT_PNG);
     SDL_Surface* original_surface = IMG_Load(config.texture_filename);
