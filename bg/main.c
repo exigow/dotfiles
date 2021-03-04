@@ -37,9 +37,9 @@ static Config parseConfig(int argc, char **argv) {
         char *word = *argv++;
         if (!strcmp(previous_word, "-f"))
             config.fragmentFile = word;
-        if (!strcmp(previous_word, "-v"))
+        else if (!strcmp(previous_word, "-v"))
             config.vertexFile = word;
-        if (!strcmp(previous_word, "-t"))
+        else if (!strcmp(previous_word, "-t"))
             config.textureFile = word;
         previous_word = word;
     }
