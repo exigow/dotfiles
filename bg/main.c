@@ -35,9 +35,9 @@ unsigned int compile_shader(const char *code, unsigned int shader_type) {
     if (compiled == GL_FALSE) {
         int length;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-        char *error;
-        glGetShaderInfoLog(shader, length, &length, error);
-        fprintf(stderr, error);
+        char *error = NULL;
+        glGetShaderInfoLog(shader, length, NULL, error);
+        printf(error);
         exit(EXIT_FAILURE);
     }
     return shader;
