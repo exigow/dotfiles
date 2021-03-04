@@ -3,6 +3,7 @@ exec --no-startup-id volumeicon
 exec --no-startup-id nm-applet
 exec terminal
 
+font xft:Source Code Pro 12
 focus_follows_mouse no
 default_border none
 
@@ -10,6 +11,9 @@ bar {
     status_command i3status
 	position top
 	separator_symbol "|"
+	colors {
+	    background #002b36
+	}
 }
 
 bindsym Mod1+F4 kill
