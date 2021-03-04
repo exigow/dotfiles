@@ -6,7 +6,7 @@
 #include <SDL2/SDL_image.h>
 #include <math.h>
 
-char* read_text_file(char *filename) {
+char* read_text(char *filename) {
     char *buffer = NULL;
     int string_size, read_size;
     FILE *handler = fopen(filename, "r");
@@ -82,13 +82,15 @@ int main(int argc, char **argv) {
     SDL_BlitSurface(original_surface, 0, surface, 0);
     SDL_FreeSurface(original_surface);
     glewInit();
-    unsigned int programId = glCreateProgram();
-    unsigned int vtxShaderId = compile_shader(read_text_file(config.vertex_filename), GL_VERTEX_SHADER);
-    unsigned int fragShaderId = compile_shader(read_text_file(config.fragment_filename), GL_FRAGMENT_SHADER);
-    glAttachShader(programId, vtxShaderId);
-    glAttachShader(programId, fragShaderId);
-    glLinkProgram(programId);
-    glValidateProgram(programId);
+    unsigned int program = glCreateProgram();
+    char *vertex_text = read_text(config.vertex_filename);
+    char *fragment_text = read_text(config.fragment_filename);
+    unsigned int vertex_shader = compile_shader(vertex_text, GL_VERTEX_SHADER);
+    unsigned int fragment_shader = compile_shader(fragment_text, GL_FRAGMENT_SHADER);
+    glAttachShader(program, vertex_shader);
+    glAttachShader(program, fragment_shader);
+    glLinkProgram(program);
+    glValidateProgram(program);
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -100,7 +102,7 @@ int main(int argc, char **argv) {
     unsigned int last_ticks = SDL_GetTicks();
     float time = 0;
     while (1) {
-        Uint32 ticks = SDL_GetTicks();
+        unsigned int ticks = SDL_GetTicks();
         float delta_time = (ticks - last_ticks) / 1000.0;
         last_ticks = ticks;
         time += delta_time;
@@ -115,10 +117,10 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        glUseProgram(programId);
+        glUseProgram(program);
         glBindVertexArray(vao);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glUniform1f(glGetUniformLocation(programId, "iTime"), time);
+        glUniform1f(glGetUniformLocation(program, "iTime"), time);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         SDL_GL_SwapWindow(sdl_window);
         SDL_Delay(1000 / 60);
