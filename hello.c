@@ -48,9 +48,31 @@ GLuint compile_shader(const char *code, GLuint shaderType) {
     return result;
 }
 
+struct Config {
+    char *fragment_filename;
+    char *vertex_filename;
+};
+
+struct Config parse_config(int argc, char **argv) {
+    char *previous_word = *argv;
+    struct Config config = { NULL, NULL };
+    while (argc--) {
+        char *word = *argv++;
+        if (!strcmp(previous_word, "-f")) {
+            config.fragment_filename = word;
+        }
+        if (!strcmp(previous_word, "-v")) {
+            config.vertex_filename = word;
+        }
+        previous_word = word;
+    }
+    return config;
+}
+
 int main(int argc, char **argv) {
+    struct Config config = parse_config(argc, argv);
     Display *display = XOpenDisplay(NULL);
-	const Window window = RootWindow(display, DefaultScreen(display));
+	Window window = RootWindow(display, DefaultScreen(display));
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 	    printf("error %s\n", SDL_GetError());
 	}
@@ -78,8 +100,8 @@ int main(int argc, char **argv) {
         printf("GLEW error %s\n", glewGetString(err));
     }
     GLuint programId = glCreateProgram();
-    GLuint vtxShaderId = compile_shader(read_text_file("/home/exigo/hello.vert"), GL_VERTEX_SHADER);
-    GLuint fragShaderId = compile_shader(read_text_file("/home/exigo/hello.frag"), GL_FRAGMENT_SHADER);
+    GLuint vtxShaderId = compile_shader(read_text_file(config.vertex_filename), GL_VERTEX_SHADER);
+    GLuint fragShaderId = compile_shader(read_text_file(config.fragment_filename), GL_FRAGMENT_SHADER);
     GLuint timeLoc;
     if (vtxShaderId && fragShaderId) {
         glAttachShader(programId, vtxShaderId);
