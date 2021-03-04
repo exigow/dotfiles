@@ -26,16 +26,16 @@ char* read_text(char *filename) {
     return buffer;
 }
 
-unsigned int compile_shader(const char *code, GLuint shader_type) {
+unsigned int compile_shader(const char *code, unsigned int shader_type) {
     unsigned int shader = glCreateShader(shader_type);
     glShaderSource(shader, 1, &code, NULL);
     glCompileShader(shader);
-    int shaderCompiled = GL_TRUE;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &shaderCompiled);
-    if (shaderCompiled == GL_FALSE) {
+    int compiled = GL_TRUE;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+    if (compiled == GL_FALSE) {
         int length;
-        char *error;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+        char *error;
         glGetShaderInfoLog(shader, length, &length, error);
         fprintf(stderr, error);
         exit(EXIT_FAILURE);
