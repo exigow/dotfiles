@@ -11,23 +11,14 @@ typedef struct Config {
 } Config;
 
 static char* readFile(char *path) {
-    char *buffer = NULL;
-    int string_size, read_size;
-    FILE *handler = fopen(path, "r");
-    if (handler) {
-        fseek(handler, 0, SEEK_END);
-        string_size = ftell(handler);
-        rewind(handler);
-        buffer = (char*) malloc(sizeof(char) * (string_size + 1) );
-        read_size = fread(buffer, sizeof(char), string_size, handler);
-        buffer[string_size] = '\0';
-        if (string_size != read_size) {
-            free(buffer);
-            buffer = NULL;
-        }
-        fclose(handler);
-    }
-    return buffer;
+    FILE *file = fopen(path, "r");
+    fseek(file, 0, SEEK_END);
+    long size = ftell(file);
+    rewind(file);
+    char *string = malloc(size + 1);
+    fread(string, 1, size, file);
+    fclose(file);
+    return string;
 }
 
 static Config parseConfig(int argc, char **argv) {
@@ -52,13 +43,8 @@ static int compileShader(const char *code, int shaderType) {
     glCompileShader(shader);
     int compiled = GL_TRUE;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
-    if (compiled == GL_FALSE) {
-        int length;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-        char *error = "";
-        glGetShaderInfoLog(shader, length, NULL, error);
+    if (compiled == GL_FALSE)
         exit(EXIT_FAILURE);
-    }
     return shader;
 }
 
