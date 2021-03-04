@@ -41,7 +41,7 @@ static int compileShader(const char *code, int shaderType) {
     unsigned int shader = glCreateShader(shaderType);
     glShaderSource(shader, 1, &code, NULL);
     glCompileShader(shader);
-    int compiled = GL_TRUE;
+    int compiled;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
     if (compiled == GL_FALSE)
         exit(EXIT_FAILURE);
