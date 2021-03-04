@@ -6,10 +6,50 @@
 #include <SDL2/SDL_image.h>
 #include <math.h>
 
-char* read_text(char *filename);
+typedef struct Config {
+    char *fragmentFile;
+    char *vertexFile;
+    char *textureFile;
+} Config;
 
-int compile_shader(const char *code, int shader_type) {
-    unsigned int shader = glCreateShader(shader_type);
+char* readFile(char *path) {
+    char *buffer = NULL;
+    int string_size, read_size;
+    FILE *handler = fopen(path, "r");
+    if (handler) {
+        fseek(handler, 0, SEEK_END);
+        string_size = ftell(handler);
+        rewind(handler);
+        buffer = (char*) malloc(sizeof(char) * (string_size + 1) );
+        read_size = fread(buffer, sizeof(char), string_size, handler);
+        buffer[string_size] = '\0';
+        if (string_size != read_size) {
+            free(buffer);
+            buffer = NULL;
+        }
+        fclose(handler);
+    }
+    return buffer;
+}
+
+Config parseConfig(int argc, char **argv) {
+    char *previous_word = *argv;
+    Config config;
+    while (argc--) {
+        char *word = *argv++;
+        if (!strcmp(previous_word, "-f"))
+            config.fragmentFile = word;
+        if (!strcmp(previous_word, "-v"))
+            config.vertexFile = word;
+        if (!strcmp(previous_word, "-t"))
+            config.textureFile = word;
+        previous_word = word;
+    }
+    return config;
+}
+
+int compileShader(const char *code, int shaderType) {
+    unsigned int shader = glCreateShader(shaderType);
     glShaderSource(shader, 1, &code, NULL);
     glCompileShader(shader);
     int compiled = GL_TRUE;
@@ -25,30 +65,10 @@ int compile_shader(const char *code, int shader_type) {
     return shader;
 }
 
-struct Config {
-    char *fragment_filename;
-    char *vertex_filename;
-    char *texture_filename;
-};
-
-struct Config parse_config(int argc, char **argv) {
-    char *previous_word = *argv;
-    struct Config config = { NULL, NULL, NULL };
-    while (argc--) {
-        char *word = *argv++;
-        if (!strcmp(previous_word, "-f"))
-            config.fragment_filename = word;
-        if (!strcmp(previous_word, "-v"))
-            config.vertex_filename = word;
-        if (!strcmp(previous_word, "-t"))
-            config.texture_filename = word;
-        previous_word = word;
-    }
-    return config;
-}
-
 int main(int argc, char **argv) {
-    struct Config config = parse_config(argc, argv);
+    Config config = parseConfig(argc, argv);
+    char *vertexText = readFile(config.vertexFile);
+    char *fragmentText = readFile(config.fragmentFile);
     Display *display = XOpenDisplay(NULL);
 	SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* window = SDL_CreateWindowFrom((void*) RootWindow(display, DefaultScreen(display)));
@@ -56,18 +76,15 @@ int main(int argc, char **argv) {
     SDL_GLContext sdl_gl = SDL_GL_CreateContext(window);
     SDL_GL_MakeCurrent(window, sdl_gl);
     IMG_Init(IMG_INIT_PNG);
-    SDL_Surface* original_surface = IMG_Load(config.texture_filename);
+    SDL_Surface* original_surface = IMG_Load(config.textureFile);
     SDL_Surface* surface = SDL_CreateRGBSurface(0, original_surface->w, original_surface->h, 24, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
     SDL_BlitSurface(original_surface, 0, surface, 0);
-    SDL_FreeSurface(original_surface);
     glewInit();
     int program = glCreateProgram();
-    char *vertex_text = read_text(config.vertex_filename);
-    char *fragment_text = read_text(config.fragment_filename);
-    int vertex_shader = compile_shader(vertex_text, GL_VERTEX_SHADER);
-    int fragment_shader = compile_shader(fragment_text, GL_FRAGMENT_SHADER);
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
+    int vertexShader = compileShader(vertexText, GL_VERTEX_SHADER);
+    int fragmentShader = compileShader(fragmentText, GL_FRAGMENT_SHADER);
+    glAttachShader(program, vertexShader);
+    glAttachShader(program, fragmentShader);
     glLinkProgram(program);
     glValidateProgram(program);
     unsigned int texture;
@@ -78,48 +95,20 @@ int main(int argc, char **argv) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     unsigned int vao;
     glGenVertexArrays(1, &vao);
-    int last_ticks = SDL_GetTicks();
     SDL_Event event;
-    float time = 0;
     while (1) {
-        int ticks = SDL_GetTicks();
-        float delta_time = (ticks - last_ticks) / 1000.0;
-        last_ticks = ticks;
-        time += delta_time;
         while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT: {
-                    exit(EXIT_SUCCESS);
-                }
+            if (event.type == SDL_QUIT) {
+                exit(EXIT_SUCCESS);
             }
         }
         glUseProgram(program);
         glBindVertexArray(vao);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glUniform1f(glGetUniformLocation(program, "iTime"), time);
+        glUniform1f(glGetUniformLocation(program, "iTime"), SDL_GetTicks() / 1000.);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         SDL_GL_SwapWindow(window);
         SDL_Delay(1000 / 60);
     }
     return 0;
-}
-
-char* read_text(char *filename) {
-    char *buffer = NULL;
-    int string_size, read_size;
-    FILE *handler = fopen(filename, "r");
-    if (handler) {
-        fseek(handler, 0, SEEK_END);
-        string_size = ftell(handler);
-        rewind(handler);
-        buffer = (char*) malloc(sizeof(char) * (string_size + 1) );
-        read_size = fread(buffer, sizeof(char), string_size, handler);
-        buffer[string_size] = '\0';
-        if (string_size != read_size) {
-            free(buffer);
-            buffer = NULL;
-        }
-        fclose(handler);
-    }
-    return buffer;
 }
