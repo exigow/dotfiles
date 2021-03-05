@@ -7,7 +7,8 @@ uniform sampler2D iChannel0;
 uniform vec2 iResolution;
 
 float map_the_world(vec3 p) {
-    float displacement = sin(p.x * 5 + iTime * 1.7) * sin(p.y * 7  + iTime * 0.4) * sin(p.z * 11  + iTime * 1.1) * .05;
+    float s = iTime * .1;
+    float displacement = sin(p.x * 5 + s * 1.7) * sin(p.y * 7  + s * 0.4) * sin(p.z * 11  + s * 1.1) * .05;
     return length(p) - 1.0 + displacement;
 }
 
@@ -34,9 +35,9 @@ vec3 ray_march(vec3 ro, vec3 rd) {
 }
 
 void main() {
-    vec3 ro = vec3(0, 0, -1.5);
+    vec3 ro = vec3(cos(iTime * .1), sin(iTime * .1) * .5, -1);
     vec3 rd = vec3((fragCoord * 2 - 1) * vec2(iResolution.x / iResolution.y, 1), 1);
     vec3 normal = ray_march(ro, rd);
     vec3 color = texture(iChannel0, normal.xy * .5 + .5).rgb;
-    fragColor = vec4(color, 1);
+    fragColor = vec4(color * length(normal), 1);
 }
