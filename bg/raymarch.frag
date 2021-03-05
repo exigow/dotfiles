@@ -20,7 +20,7 @@ vec3 calculate_normal(vec3 p) {
 
 vec3 ray_march(vec3 ro, vec3 rd) {
     float total_distance_traveled = 0;
-    for (int i = 0; i < 32; ++i) {
+    for (int i = 0; i < 16; ++i) {
         vec3 current_position = ro + total_distance_traveled * rd;
         float distance_to_closest = map_the_world(current_position);
         if (distance_to_closest < 0.005) {
@@ -32,7 +32,7 @@ vec3 ray_march(vec3 ro, vec3 rd) {
 }
 
 void main() {
-    vec3 ro = vec3(0, 0, -2);
+    vec3 ro = vec3(0, 0, -1.5);
     vec3 rd = vec3(fragCoord.xy * 2 - 1, 1);
     vec3 shaded_color = ray_march(ro, rd);
     fragColor = vec4(shaded_color, 1);
