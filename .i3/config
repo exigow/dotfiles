@@ -21,7 +21,7 @@ bar {
 }
 
 bindsym Mod1+F4 kill
-bindsym Mod4+R exec --no-startup-id rofi -show run -theme theme.rasi
+bindsym Mod4+R exec --no-startup-id dmenu_recency
 bindsym Mod4+L exec --no-startup-id blurlock
 bindsym Mod1+Tab workspace next
 bindsym Mod1+shift+Tab workspace prev
