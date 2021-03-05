@@ -33,9 +33,9 @@ vec3 ray_march(vec3 ro, vec3 rd) {
 }
 
 void main() {
-    vec3 ro = vec3(0, 0, -1.5);
+    vec3 ro = vec3(cos(iTime * .7) * .5, sin(iTime * .3) * .1, -1.5);
     vec3 rd = vec3(fragCoord.xy * 2 - 1, 1);
-    vec3 normal = ray_march(ro, rd) ;
-    vec3 color = texture(iChannel0, mix(fragCoord, normal.xy + .5, length(normal))).rgb;
+    vec3 normal = ray_march(ro, rd);
+    vec3 color = texture(iChannel0, normal.xy + .5).rgb;
     fragColor = vec4(color, 1);
 }
