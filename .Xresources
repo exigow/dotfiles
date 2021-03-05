@@ -1,5 +1,5 @@
 *.foreground: #93a1a1
-*.background: #002b36
+*.background: #000000
 *.cursorColor: #93a1a1
 *.color0: #002b36
 *.color1: #dc322f
