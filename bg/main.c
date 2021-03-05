@@ -61,7 +61,9 @@ int main(int argc, char **argv) {
     Display *display = XOpenDisplay(NULL);
 	SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* window = SDL_CreateWindowFrom((void*) RootWindow(display, DefaultScreen(display)));
-    SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    int width, height;
+    SDL_GetRendererOutputSize(renderer, &width, &height);
     SDL_GL_MakeCurrent(window, SDL_GL_CreateContext(window));
     SDL_Surface* imageSurface = IMG_Load(config.textureFile);
     SDL_Surface* surface = SDL_CreateRGBSurface(0, imageSurface->w, imageSurface->h, 24, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
@@ -90,6 +92,7 @@ int main(int argc, char **argv) {
         glUseProgram(program);
         glBindTexture(GL_TEXTURE_2D, texture);
         glUniform1f(glGetUniformLocation(program, "iTime"), SDL_GetTicks() / 1000.0);
+        glUniform2f(glGetUniformLocation(program, "iResolution"), (float) width, (float) height);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         SDL_GL_SwapWindow(window);
         SDL_Delay(1000 / 60);

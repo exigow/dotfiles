@@ -4,6 +4,7 @@ in vec2 fragCoord;
 out vec4 fragColor;
 uniform float iTime;
 uniform sampler2D iChannel0;
+uniform vec2 iResolution;
 
 float map_the_world(vec3 p) {
     float displacement = sin(p.x * 5 + iTime * 1.7) * sin(p.y * 7  + iTime * 0.4) * sin(p.z * 11  + iTime * 1.1) * .05;
@@ -21,7 +22,7 @@ vec3 calculate_normal(vec3 p) {
 
 vec3 ray_march(vec3 ro, vec3 rd) {
     float total_distance_traveled = 0;
-    for (int i = 0; i < 32; ++i) {
+    for (int i = 0; i < 64; ++i) {
         vec3 current_position = ro + total_distance_traveled * rd;
         float distance_to_closest = map_the_world(current_position);
         if (distance_to_closest < 0.001) {
@@ -33,9 +34,9 @@ vec3 ray_march(vec3 ro, vec3 rd) {
 }
 
 void main() {
-    vec3 ro = vec3(cos(iTime * .7) * .5, sin(iTime * .3) * .1, -1.5);
-    vec3 rd = vec3(fragCoord.xy * 2 - 1, 1);
+    vec3 ro = vec3(0, 0, -1.5);
+    vec3 rd = vec3((fragCoord * 2 - 1) * vec2(iResolution.x / iResolution.y, 1), 1);
     vec3 normal = ray_march(ro, rd);
-    vec3 color = texture(iChannel0, normal.xy + .5).rgb;
+    vec3 color = texture(iChannel0, normal.xy * .5 + .5).rgb;
     fragColor = vec4(color, 1);
 }

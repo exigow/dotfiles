@@ -5,4 +5,4 @@ all:
 	$(CC) $(CFLAGS) -o bg main.c
 
 run:
-	./bg -v quad.vert -f raymarch.frag -t lit.png
+	./bg -v quad.vert -f raymarch.frag -t matcap.png
