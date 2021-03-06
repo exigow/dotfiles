@@ -10,12 +10,7 @@ void main() {
     vec2 yo = uv * 2. - 1.;
     vec3 dir = vec3(yo, 1);
     vec3 camera = vec3(0, 1, iTime);
-
-    float h = camera.y;
-    float a = -dir.y;
-    float t = h / a;
-    vec3 p = camera + dir * t;
-    vec2 texUv = p.xz;
-    vec3 color =  vec3(texture(iChannel0, texUv));
+    vec3 p = camera + dir * camera.y / abs(dir.y);
+    vec3 color =  vec3(texture(iChannel0, p.xz));
     fragColor = vec4(color, 1);
 }
