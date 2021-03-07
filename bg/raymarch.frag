@@ -8,8 +8,8 @@ uniform vec2 iResolution;
 
 float map(vec3 p) {
     float s = iTime * .1;
-    float displacement = sin(p.x * 5 + s * 1.7) * sin(p.y * 7  + s * 0.4) * sin(p.z * 11  + s * 1.1) * .05;
-    return length(p) - 1.0 + displacement;
+    float displacement = sin(p.x + s * 1.7) * sin(p.y * 1.7  + s * 0.4) * sin(p.z * 3.7 + s * 1.1) * .15;
+    return length(p) - 4.0 + displacement;
 }
 
 vec3 calculate_normal(vec3 pos) {
@@ -17,23 +17,21 @@ vec3 calculate_normal(vec3 pos) {
     return normalize(e.xyy * map(pos + e.xyy) + e.yyx * map(pos + e.yyx) + e.yxy * map(pos + e.yxy) + e.xxx * map(pos + e.xxx));
 }
 
-vec2 ray_march(vec3 ro, vec3 rd) {
-    float total_distance_traveled = 0;
-    for (int i = 0; i < 64; ++i) {
-        vec3 current_position = ro + total_distance_traveled * rd;
-        float distance_to_closest = map(current_position);
-        if (distance_to_closest < 0.001) {
-            return calculate_normal(current_position).xy;
-        }
-        total_distance_traveled += distance_to_closest;
-    }
-    return vec2(0);
-}
-
 void main() {
-    vec3 ro = vec3(cos(iTime * .025), sin(iTime * .025) * .5, -1);
+    fragColor = vec4(0, 0, 0, 1);
+    vec3 ro = vec3(cos(iTime * .025) * 2, sin(iTime * .025) * 1.5, -5);
     vec3 rd = vec3((fragCoord * 2 - 1) * vec2(iResolution.x / iResolution.y, 1), 1);
-    vec2 normal = ray_march(ro, rd);
-    vec3 color = texture(iChannel0, normal * .5 + .5).rgb;
-    fragColor = vec4(color * length(normal), 1);
+    float tmin = 1.0;
+    float tmax = 4.0;
+    float t = tmin;
+    for (int i = 0; i < 32 && t < tmax; i++) {
+        vec3 current_position = ro + tmin * rd;
+        float h = map(current_position);
+        if (abs(h) < 0.001 * t) {
+            vec3 n = calculate_normal(current_position);
+            fragColor.rgb = texture(iChannel0, n.xy * .5 + .5).rgb;
+            break;
+        }
+        tmin += h;
+    }
 }
