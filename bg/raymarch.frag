@@ -17,23 +17,23 @@ vec3 calculate_normal(vec3 pos) {
     return normalize(e.xyy * map(pos + e.xyy) + e.yyx * map(pos + e.yyx) + e.yxy * map(pos + e.yxy) + e.xxx * map(pos + e.xxx));
 }
 
-vec3 ray_march(vec3 ro, vec3 rd) {
+vec2 ray_march(vec3 ro, vec3 rd) {
     float total_distance_traveled = 0;
     for (int i = 0; i < 64; ++i) {
         vec3 current_position = ro + total_distance_traveled * rd;
         float distance_to_closest = map(current_position);
         if (distance_to_closest < 0.001) {
-            return calculate_normal(current_position);
+            return calculate_normal(current_position).xy;
         }
         total_distance_traveled += distance_to_closest;
     }
-    return vec3(0);
+    return vec2(0);
 }
 
 void main() {
     vec3 ro = vec3(cos(iTime * .025), sin(iTime * .025) * .5, -1);
     vec3 rd = vec3((fragCoord * 2 - 1) * vec2(iResolution.x / iResolution.y, 1), 1);
-    vec3 normal = ray_march(ro, rd);
-    vec3 color = texture(iChannel0, normal.xy * .5 + .5).rgb;
+    vec2 normal = ray_march(ro, rd);
+    vec3 color = texture(iChannel0, normal * .5 + .5).rgb;
     fragColor = vec4(color * length(normal), 1);
 }
