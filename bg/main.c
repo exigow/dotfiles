@@ -68,6 +68,7 @@ int main(int argc, char **argv) {
     SDL_Surface* imageSurface = IMG_Load(config.textureFile);
     SDL_Surface* surface = SDL_CreateRGBSurface(0, imageSurface->w, imageSurface->h, 24, 0xff000000, 0x00ff0000, 0x0000ff00, 0);
     SDL_BlitSurface(imageSurface, 0, surface, 0);
+    SDL_FreeSurface(imageSurface);
     glewInit();
     int program = glCreateProgram();
     int vertexShader = compileShader(vertexText, GL_VERTEX_SHADER);
@@ -86,6 +87,8 @@ int main(int argc, char **argv) {
     while (1) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
+                SDL_FreeSurface(surface);
+                SDL_DestroyWindow(window);
                 exit(EXIT_SUCCESS);
             }
         }
@@ -97,5 +100,4 @@ int main(int argc, char **argv) {
         SDL_GL_SwapWindow(window);
         SDL_Delay(1000 / 60);
     }
-    return 0;
 }
