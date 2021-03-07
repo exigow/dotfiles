@@ -8,6 +8,7 @@ typedef struct Config {
     char *fragmentFile;
     char *vertexFile;
     char *textureFile;
+    float speed;
 } Config;
 
 static char* readFile(char *path) {
@@ -22,17 +23,24 @@ static char* readFile(char *path) {
 }
 
 static Config parseConfig(int argc, char **argv) {
-    char *previous_word = *argv;
-    Config config;
+    char *prev = *argv;
+    Config config = {
+        NULL,
+        NULL,
+        NULL,
+        1.0
+    };
     while (argc--) {
         char *word = *argv++;
-        if (!strcmp(previous_word, "-f"))
+        if (!strcmp(prev, "-f"))
             config.fragmentFile = word;
-        else if (!strcmp(previous_word, "-v"))
+        else if (!strcmp(prev, "-v"))
             config.vertexFile = word;
-        else if (!strcmp(previous_word, "-t"))
+        else if (!strcmp(prev, "-t"))
             config.textureFile = word;
-        previous_word = word;
+        else if (!strcmp(prev, "-s"))
+            config.speed = atof(word);
+        prev = word;
     }
     return config;
 }
@@ -94,7 +102,7 @@ int main(int argc, char **argv) {
         }
         glUseProgram(program);
         glBindTexture(GL_TEXTURE_2D, texture);
-        glUniform1f(glGetUniformLocation(program, "iTime"), SDL_GetTicks() / 1000.0);
+        glUniform1f(glGetUniformLocation(program, "iTime"), SDL_GetTicks() / 1000.0 * config.speed);
         glUniform2f(glGetUniformLocation(program, "iResolution"), (float) width, (float) height);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         SDL_GL_SwapWindow(window);
