@@ -7,9 +7,11 @@ uniform sampler2D iChannel0;
 uniform vec2 iResolution;
 
 float map(vec3 p) {
-    float s = iTime * .1;
-    float displacement = sin(p.x + s * 1.7) * sin(p.y * 1.7  + s * 0.4) * sin(p.z * 3.7 + s * 1.1) * .15;
-    return length(p) - 4.0 + displacement;
+    float displacement =
+        sin(p.x * 0.72 + iTime * 0.23) *
+        sin(p.y * 1.61 + iTime * 0.12) *
+        sin(p.z * 3.73 + iTime * 0.09);
+    return length(p) - 4.0 + displacement * .15;
 }
 
 vec3 calculate_normal(vec3 pos) {
@@ -18,7 +20,7 @@ vec3 calculate_normal(vec3 pos) {
 }
 
 void main() {
-    vec3 ro = vec3(cos(iTime * .025) * 2, sin(iTime * .025) * 1.5, -5);
+    vec3 ro = vec3(cos(iTime * .025) * 2, sin(iTime * .025) * 1.5, -4.5);
     vec3 rd = vec3((fragCoord * 2 - 1) * vec2(iResolution.x / iResolution.y, 1), 1);
     float tmin = 1.0;
     float tmax = 4.0;
