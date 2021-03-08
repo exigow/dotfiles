@@ -18,18 +18,19 @@ vec3 calculate_normal(vec3 pos) {
 }
 
 void main() {
-    fragColor = vec4(0, 0, 0, 1);
     vec3 ro = vec3(cos(iTime * .025) * 2, sin(iTime * .025) * 1.5, -5);
     vec3 rd = vec3((fragCoord * 2 - 1) * vec2(iResolution.x / iResolution.y, 1), 1);
     float tmin = 1.0;
-    float tmax = 8.0;
-    for (int i = 0; i < 32 && tmin < tmax; i++) {
+    float tmax = 4.0;
+    for (int i = 0; i < 16 && tmin < tmax; i++) {
         vec3 pos = ro + tmin * rd;
         float h = map(pos);
-        if (abs(h) < 0.001 * tmin) {
+        float e = 1.0 - min(abs(h) * i, 1);
+        if (abs(h) < 0.1) {
             vec3 n = calculate_normal(pos);
-            fragColor.rgb = texture(iChannel0, n.xy * .5 + .5).rgb;
-            break;
+            fragColor.rgb = texture(iChannel0, n.xy * .5 + .5).rgb * e;
+        } else {
+            fragColor.rgb = vec3(e);
         }
         tmin += h;
     }
