@@ -1,4 +1,3 @@
-exec --no-startup-id xautolock -time 10 -locker blurlock
 exec --no-startup-id nm-applet
 exec terminal
 
@@ -26,12 +25,12 @@ bindsym Mod4+L exec --no-startup-id blurlock
 bindsym Mod1+Tab workspace next
 bindsym Mod1+shift+Tab workspace prev
 bindsym Mod4+F floating toggle
-bindsym Mod4+Up move up
-bindsym Mod4+Down move down
-bindsym Mod4+Left move left
-bindsym Mod4+Right move right
-bindsym Mod4+plus resize grow up 64;resize grow down 64;resize grow left 64;resize grow right 64;
-bindsym Mod4+minus resize shrink up 64;resize shrink down 64;resize shrink left 64;resize shrink right 64;
+bindsym Mod4+Up move up 128
+bindsym Mod4+Down move down 128
+bindsym Mod4+Left move left 128
+bindsym Mod4+Right move right 128
+bindsym Mod4+plus resize grow up 128;resize grow down 128;resize grow left 128;resize grow right 128;
+bindsym Mod4+minus resize shrink up 128;resize shrink down 128;resize shrink left 128;resize shrink right 128;
 bindsym Mod4+0 workspace 0
 bindsym Mod4+1 workspace 1
 bindsym Mod4+2 workspace 2
