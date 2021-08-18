@@ -4,3 +4,6 @@
 [user]
 	name = Jakub Blach
 	email = jakubblach@gmail.com
+[core]
+	autocrlf = input
+	editor = nano
