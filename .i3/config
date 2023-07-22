@@ -30,6 +30,18 @@ bindsym $Windows+6 workspace 6
 bindsym $Windows+7 workspace 7
 bindsym $Windows+8 workspace 8
 bindsym $Windows+9 workspace 9
+
+bindsym $Windows+Shift+0 move to workspace 0
+bindsym $Windows+Shift+1 move to workspace 1
+bindsym $Windows+Shift+2 move to workspace 2
+bindsym $Windows+Shift+3 move to workspace 3
+bindsym $Windows+Shift+4 move to workspace 4
+bindsym $Windows+Shift+5 move to workspace 5
+bindsym $Windows+Shift+6 move to workspace 6
+bindsym $Windows+Shift+7 move to workspace 7
+bindsym $Windows+Shift+8 move to workspace 8
+bindsym $Windows+Shift+9 move to workspace 9
+
 bindsym $Windows+R exec --no-startup-id dmenu_run -l 20 -fn "Source Code Pro" -nb \#000000 -sb \#666666 -nf \#666666 -sf \#ffffff
 bindsym $Windows+L exec --no-startup-id i3lock -c 000000
 bindsym $Windows+F floating toggle
