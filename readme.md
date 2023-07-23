@@ -26,3 +26,9 @@ git reset origin/master
 ```shell
 sudo pacman -Syu fish firefox keepassxc thunar intellij-idea-community-edition pa-applet
 ```
+
+Set `fish` as default shell:
+
+```shell
+chsh -s /usr/bin/fish
+```
