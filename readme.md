@@ -16,7 +16,7 @@ To fix that, init empty repo, add remote and reset:
 ```shell
 cd ~
 git init
-git remote add origin https://github.com/exigow/dotfiles
+git remote add origin git@github.com:exigow/dotfiles.git
 git fetch
 git reset origin/master
 ```
