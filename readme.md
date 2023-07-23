@@ -1,4 +1,4 @@
-### About
+## About
 
 * Manjaro + i3
 * keyboard shortcuts mimics Windows shortcuts
@@ -7,7 +7,7 @@
 * visuals: no gaps, black & white, high contrast
 * sound & wi-fi applets in tray
 
-### Installation
+## Installation
 
 Default clone command will fail because home directory exists. 
 
@@ -21,7 +21,7 @@ git fetch
 git reset origin/master
 ```
 
-### Applications (optional)
+## Applications (optional)
 
 ```shell
 sudo pacman -Syu fish firefox keepassxc thunar intellij-idea-community-edition pa-applet
