@@ -24,7 +24,7 @@ git reset origin/master
 ## Applications (optional)
 
 ```shell
-pacman -Syu fish firefox keepassxc thunar intellij-idea-community-edition pa-applet steam ncspot
+pacman -Syu fish firefox keepassxc thunar intellij-idea-community-edition pa-applet steam
 ```
 
 Set `fish` as default shell:
