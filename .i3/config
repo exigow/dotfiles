@@ -43,9 +43,16 @@ bindsym $Windows+Shift+7 move to workspace 7
 bindsym $Windows+Shift+8 move to workspace 8
 bindsym $Windows+Shift+9 move to workspace 9
 
+bindsym $Windows+Up move up 128
+bindsym $Windows+Down move down 128
+bindsym $Windows+Left move left 128
+bindsym $Windows+Right move right 128
+bindsym $Windows+plus resize grow up 128;resize grow down 128;resize grow left 128;resize grow right 128;
+bindsym $Windows+minus resize shrink up 128;resize shrink down 128;resize shrink left 128;resize shrink right 128;
+
 bindsym $Windows+R exec --no-startup-id dmenu_run -l 20 -fn "Source Code Pro" -nb \#000000 -sb \#666666 -nf \#666666 -sf \#ffffff
 bindsym $Windows+L exec --no-startup-id i3lock -c 000000
-bindsym $Windows+F floating toggle
+bindsym $Windows+T floating toggle
 bindsym $Windows+Shift+R restart
 
 bindsym $Alt+F4 kill
