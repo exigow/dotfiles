@@ -1,6 +1,6 @@
 exec --no-startup-id nm-applet
 exec --no-startup-id pa-applet
-exec terminal
+exec i3-sensible-terminal
 
 font xft:Source Code Pro 12
 focus_follows_mouse no
